@@ -6,10 +6,12 @@
     "install-all": "cd backend && npm install && cd ../frontend && npm install",
     "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
     "start": "concurrently \"cd backend && npm start\" \"cd frontend && npm run preview\"",
-    "build": "cd frontend && npm install && npm run build",
+    "build": "cd frontend && npm ci && npm run build",
     "heroku-postbuild": "cd frontend && npm install && npm run build",
     "backend": "cd backend && npm run dev",
-    "frontend": "cd frontend && npm run dev"
+    "frontend": "cd frontend && npm run dev",
+    "vercel-build": "cd frontend && npm install && npm run build",
+    "postinstall": "cd frontend && npm install"
   },
   "engines": {
     "node": ">=18.0.0",
