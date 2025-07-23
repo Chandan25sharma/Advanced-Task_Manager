@@ -5,7 +5,7 @@ import { User, Mail, Calendar, ArrowLeft } from 'lucide-react';
 import { RootState } from '../redux/store';
 
 const Profile: React.FC = () => {
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.auth as { user: any });
 
   if (!user) {
     return (

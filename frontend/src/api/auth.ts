@@ -31,8 +31,16 @@ export interface AuthResponse {
 // Auth API functions
 export const authApi = {
   login: async (credentials: LoginCredentials): Promise<AuthResponse> => {
-    const response = await api.post('/auth/login', credentials);
-    return response.data;
+    console.log('📡 API login request:', credentials);
+    console.log('📡 API base URL:', (import.meta as any).env?.VITE_API_BASE_URL || 'http://localhost:5000/api');
+    try {
+      const response = await api.post('/auth/login', credentials);
+      console.log('✅ API login response:', response.data);
+      return response.data;
+    } catch (error) {
+      console.error('❌ API login error:', error);
+      throw error;
+    }
   },
 
   register: async (userData: RegisterData): Promise<AuthResponse> => {

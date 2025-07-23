@@ -8,6 +8,7 @@ import socketClient from './sockets/socketClient';
 // Pages
 import Login from './pages/Login';
 import Register from './pages/Register';
+import AdminLogin from './pages/AdminLogin';
 import Dashboard from './pages/Dashboard';
 import ProjectBoard from './pages/ProjectBoard';
 import Profile from './pages/Profile';
@@ -55,6 +56,10 @@ function App() {
         <Route 
           path="/register" 
           element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <Register />} 
+        />
+        <Route 
+          path="/admin" 
+          element={isAuthenticated ? <Navigate to="/dashboard" replace /> : <AdminLogin />} 
         />
         
         {/* Protected routes */}

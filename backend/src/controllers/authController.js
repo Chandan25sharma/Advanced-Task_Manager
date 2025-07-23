@@ -4,23 +4,49 @@ const { generateToken } = require('../utils/jwt');
 
 const register = async (req, res) => {
   try {
+    console.log('📝 Registration attempt:', { 
+      username: req.body.username, 
+      email: req.body.email,
+      hasPassword: !!req.body.password 
+    });
+
     const { username, email, password, role } = req.body;
 
     // Validate required fields
     if (!username || !email || !password) {
+      console.log('❌ Missing required fields');
       return res.status(400).json({ 
         message: 'Username, email, and password are required' 
+      });
+    }
+
+    // Validate email format
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i;
+    if (!emailRegex.test(email)) {
+      console.log('❌ Invalid email format');
+      return res.status(400).json({ 
+        message: 'Invalid email format' 
+      });
+    }
+
+    // Validate password length
+    if (password.length < 6) {
+      console.log('❌ Password too short');
+      return res.status(400).json({ 
+        message: 'Password must be at least 6 characters long' 
       });
     }
 
     // Check if user already exists
     const existingUserByEmail = await User.findByEmail(email);
     if (existingUserByEmail) {
+      console.log('❌ Email already registered');
       return res.status(400).json({ message: 'Email already registered' });
     }
 
     const existingUserByUsername = await User.findByUsername(username);
     if (existingUserByUsername) {
+      console.log('❌ Username already taken');
       return res.status(400).json({ message: 'Username already taken' });
     }
 
@@ -36,6 +62,8 @@ const register = async (req, res) => {
       role: role || 'user'
     });
 
+    console.log('✅ User created successfully:', user.id);
+
     // Generate token
     const token = generateToken({ userId: user.id, role: user.role });
 
@@ -48,16 +76,26 @@ const register = async (req, res) => {
       token
     });
   } catch (error) {
-    console.error('Registration error:', error);
-    res.status(500).json({ message: 'Registration failed' });
+    console.error('❌ Registration error:', error);
+    res.status(500).json({ 
+      message: 'Registration failed',
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+    });
   }
 };
 
 const login = async (req, res) => {
   try {
+    console.log('🔐 Login attempt:', { 
+      email: req.body.email, 
+      ip: req.ip || req.connection.remoteAddress,
+      userAgent: req.get('User-Agent')?.substring(0, 50) || 'Unknown'
+    });
+    
     const { email, password } = req.body;
 
     if (!email || !password) {
+      console.log('❌ Missing email or password');
       return res.status(400).json({ 
         message: 'Email and password are required' 
       });
@@ -66,14 +104,23 @@ const login = async (req, res) => {
     // Find user by email
     const user = await User.findByEmail(email);
     if (!user) {
+      console.log('❌ User not found for email:', email);
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
     // Check password
     const isPasswordValid = await bcrypt.compare(password, user.password);
     if (!isPasswordValid) {
+      console.log('❌ Invalid password for user:', email);
       return res.status(401).json({ message: 'Invalid credentials' });
     }
+
+    console.log('✅ Login successful for user:', { 
+      id: user.id, 
+      email: user.email, 
+      username: user.username,
+      role: user.role 
+    });
 
     // Generate token
     const token = generateToken({ userId: user.id, role: user.role });
@@ -87,8 +134,15 @@ const login = async (req, res) => {
       token
     });
   } catch (error) {
-    console.error('Login error:', error);
-    res.status(500).json({ message: 'Login failed' });
+    console.error('❌ Login error:', {
+      error: error.message,
+      stack: error.stack,
+      email: req.body?.email
+    });
+    res.status(500).json({ 
+      message: 'Login failed',
+      error: process.env.NODE_ENV === 'development' ? error.message : 'Internal server error'
+    });
   }
 };
 

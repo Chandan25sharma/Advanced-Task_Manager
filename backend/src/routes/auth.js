@@ -10,6 +10,15 @@ const { authenticate } = require('../middleware/auth');
 
 const router = express.Router();
 
+// Health check route
+router.get('/health', (req, res) => {
+  res.json({ 
+    status: 'OK', 
+    message: 'Task Manager API is running',
+    timestamp: new Date().toISOString()
+  });
+});
+
 // Public routes
 router.post('/register', register);
 router.post('/login', login);

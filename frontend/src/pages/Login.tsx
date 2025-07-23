@@ -9,7 +9,11 @@ import { LoginCredentials } from '../api/auth';
 
 const Login: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { isLoading, error, isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { isLoading, error, isAuthenticated } = useSelector((state: RootState) => state.auth as {
+    isLoading: boolean;
+    error: string | null;
+    isAuthenticated: boolean;
+  });
   const [showPassword, setShowPassword] = useState(false);
 
   const {
@@ -146,6 +150,12 @@ const Login: React.FC = () => {
             <a href="#" className="font-medium text-primary-600 hover:text-primary-500">
               Reset it here
             </a>
+          </p>
+          <p className="mt-2 text-sm text-gray-600">
+            Admin access?{' '}
+            <Link to="/admin" className="font-medium text-red-600 hover:text-red-500">
+              Admin Login
+            </Link>
           </p>
         </div>
       </div>

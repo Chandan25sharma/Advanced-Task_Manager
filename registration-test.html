@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Test</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .form-group { margin: 10px 0; }
+        label { display: block; margin-bottom: 5px; }
+        input { width: 300px; padding: 8px; }
+        button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+        .result { margin-top: 20px; padding: 10px; border: 1px solid #ccc; }
+        .error { background: #f8d7da; color: #721c24; }
+        .success { background: #d4edda; color: #155724; }
+    </style>
+</head>
+<body>
+    <h1>Task Manager Registration Test</h1>
+    
+    <form id="registerForm">
+        <div class="form-group">
+            <label>Username:</label>
+            <input type="text" id="username" required>
+        </div>
+        <div class="form-group">
+            <label>Email:</label>
+            <input type="email" id="email" required>
+        </div>
+        <div class="form-group">
+            <label>Password:</label>
+            <input type="password" id="password" required>
+        </div>
+        <button type="submit">Register</button>
+    </form>
+    
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Registering...';
+            
+            try {
+                const response = await fetch('http://localhost:5000/api/auth/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ username, email, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.innerHTML = `
+                        <h3>✅ Registration Successful!</h3>
+                        <p><strong>User ID:</strong> ${data.user.id}</p>
+                        <p><strong>Username:</strong> ${data.user.username}</p>
+                        <p><strong>Email:</strong> ${data.user.email}</p>
+                        <p><strong>Token:</strong> ${data.token.substring(0, 50)}...</p>
+                    `;
+                } else {
+                    resultDiv.className = 'result error';
+                    resultDiv.innerHTML = `
+                        <h3>❌ Registration Failed</h3>
+                        <p>${data.message}</p>
+                    `;
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.innerHTML = `
+                    <h3>❌ Network Error</h3>
+                    <p>${error.message}</p>
+                `;
+            }
+        });
+    </script>
+</body>
+</html>

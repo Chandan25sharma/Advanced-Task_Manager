@@ -9,7 +9,11 @@ import { RegisterData } from '../api/auth';
 
 const Register: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { isLoading, error, isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const { isLoading, error, isAuthenticated } = useSelector((state: RootState) => state.auth as {
+    isLoading: boolean;
+    error: string | null;
+    isAuthenticated: boolean;
+  });
   const [showPassword, setShowPassword] = useState(false);
 
   const {

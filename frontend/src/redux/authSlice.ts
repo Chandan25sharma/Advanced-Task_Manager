@@ -22,11 +22,15 @@ export const login = createAsyncThunk(
   'auth/login',
   async (credentials: LoginCredentials, { rejectWithValue }) => {
     try {
+      console.log('🔐 Redux login attempt:', credentials);
       const response = await authApi.login(credentials);
+      console.log('✅ Redux login success:', response);
       localStorage.setItem('token', response.token);
       localStorage.setItem('user', JSON.stringify(response.user));
       return response;
     } catch (error: any) {
+      console.error('❌ Redux login error:', error);
+      console.error('❌ Error response:', error.response?.data);
       return rejectWithValue(error.response?.data?.message || 'Login failed');
     }
   }

@@ -1,6 +1,34 @@
 # Task Manager - Full-Stack Collaboration App
 
-A comprehensive task management web application built with React, Node.js, Socket.io, and JSON file storage. Features real-time collaboration, drag & drop task boards, team workspaces, and time tracking.
+A comprehensive task management web application built with React, Node.js, Socket.io, and## 🎯 Usage
+
+### Getting Started
+
+1. **Access the application** at http://localhost:3000
+2. **Admin Login**: Use `/admin` route or the admin login link
+   - Admin: `admin@taskmanager.com` / `Admin123!`
+   - Demo User: `demo@taskmanager.com` / `Demo123!`
+3. **Register a new account** or login with existing credentials
+4. **Create your first project** from the dashboard
+5. **Add team members** by email to collaborate
+6. **Create tasks** and organize them in To Do, In Progress, and Done columns
+7. **Drag and drop** tasks between columns to update their status
+8. **Add comments** and track time on tasks
+9. **Monitor progress** with real-time updates
+
+### Demo Accounts
+
+The application comes with pre-configured demo accounts:
+
+- **Admin Account**: 
+  - Email: `admin@taskmanager.com`
+  - Password: `Admin123!`
+  - Role: Administrator with full access
+
+- **Demo User Account**: 
+  - Email: `demo@taskmanager.com`
+  - Password: `Demo123!`
+  - Role: Regular userstorage. Features real-time collaboration, drag & drop task boards, team workspaces, and time tracking.
 
 ## 🚀 Features
 
@@ -95,6 +123,16 @@ A comprehensive task management web application built with React, Node.js, Socke
 
 ### Full Application Startup
 
+#### Option 1: Quick Start (Recommended)
+```bash
+# Install all dependencies for both frontend and backend
+npm run install-all
+
+# Run both servers simultaneously
+npm run dev
+```
+
+#### Option 2: Manual Start
 To run both frontend and backend simultaneously:
 
 1. **Terminal 1** - Backend:
@@ -109,12 +147,24 @@ To run both frontend and backend simultaneously:
    npm run dev
    ```
 
+#### Individual Server Commands
+```bash
+# Run only backend
+npm run backend
+
+# Run only frontend  
+npm run frontend
+
+# Build frontend for production
+npm run build
+```
+
 The application will be available at:
-- Frontend: http://localhost:3000
+- Frontend: http://localhost:3000 (or http://localhost:3001 if port 3000 is in use)
 - Backend API: http://localhost:5000
 - Socket.io: http://localhost:5000
 
-## 🎯 Usage
+## Usage
 
 ### Getting Started
 
@@ -149,7 +199,26 @@ The application will be available at:
 - View time analytics and reports
 - Set estimated vs actual time
 
-## 🏗️ Project Structure
+## Data Storage
+
+This application uses JSON file-based storage located in `backend/src/data/`:
+
+```
+backend/src/data/
+├── users.json      # User accounts and profiles
+├── projects.json   # Project information and settings
+└── tasks.json      # Task details, comments, and time tracking
+```
+
+### Data Models
+
+- **Users**: Authentication, profile information, preferences
+- **Projects**: Team workspaces, member permissions, project settings
+- **Tasks**: Task details, status, assignments, comments, time sessions
+
+The data files are automatically created when the application starts and will persist your data between server restarts.
+
+## Project Structure
 
 ```
 task-manager/
@@ -264,6 +333,49 @@ If you encounter any issues or have questions:
 2. Create a new issue with detailed information about the problem
 3. Include steps to reproduce the issue
 4. Provide relevant logs and error messages
+
+### Common Issues & Solutions
+
+#### Registration Issues
+If registration fails:
+1. Check that all fields are properly filled
+2. Ensure email format is valid
+3. Password must be at least 6 characters
+4. Check browser console for detailed error messages
+5. Verify backend server is running on port 5000
+
+#### Port Already in Use Error
+If you get an `EADDRINUSE` error:
+
+**Windows:**
+```bash
+# Find the process using the port
+netstat -ano | findstr :5000
+
+# Kill the process (replace PID with actual process ID)
+taskkill /PID <PID> /F
+```
+
+**macOS/Linux:**
+```bash
+# Find and kill the process using the port
+lsof -ti:5000 | xargs kill -9
+```
+
+#### Frontend Not Connecting to Backend
+1. Ensure both servers are running
+2. Check that CORS_ORIGIN in backend/.env includes your frontend URL
+3. Verify API_BASE_URL in frontend environment variables
+
+#### Build Errors
+1. Delete `node_modules` and `package-lock.json`
+2. Run `npm install` again
+3. Clear npm cache: `npm cache clean --force`
+
+#### Socket.io Connection Issues
+1. Check that both frontend and backend are using the same Socket.io version
+2. Verify the Socket.io URL in frontend configuration
+3. Check browser console for connection errors
 
 ## 🔮 Future Enhancements
 

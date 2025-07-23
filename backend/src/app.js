@@ -14,10 +14,33 @@ const createApp = () => {
   const app = express();
 
   // CORS configuration
-  app.use(cors({
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
-    credentials: true
-  }));
+  const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000')
+  .split(',')
+  .map(origin => origin.trim());
+
+app.use(cors({
+  origin: function (origin, callback) {
+    // Allow no-origin requests (e.g., from Postman)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      return callback(null, true);
+    } else {
+      return callback(new Error('❌ Not allowed by CORS'));
+    }
+  },
+  credentials: true
+}));
+
+
+  // Request logging middleware
+  app.use((req, res, next) => {
+    console.log(`📡 ${req.method} ${req.path}`, {
+      origin: req.get('Origin') || 'No origin',
+      userAgent: req.get('User-Agent')?.substring(0, 50) || 'Unknown'
+    });
+    next();
+  });
 
   // Body parsing middleware
   app.use(express.json({ limit: '10mb' }));

@@ -3,6 +3,7 @@ const http = require('http');
 const { Server } = require('socket.io');
 const createApp = require('./app');
 const { socketAuth, handleConnection } = require('./socket/socketHandlers');
+const { seedUsers } = require('./utils/seedUsers');
 
 const PORT = process.env.PORT || 5000;
 
@@ -13,9 +14,20 @@ const app = createApp();
 const server = http.createServer(app);
 
 // Create Socket.IO server
+const allowedOrigins = (process.env.CORS_ORIGIN || 'http://localhost:3000')
+  .split(',')
+  .map(origin => origin.trim());
+
 const io = new Server(server, {
   cors: {
-    origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      } else {
+        return callback(new Error('❌ Not allowed by Socket.IO CORS'));
+      }
+    },
     methods: ['GET', 'POST'],
     credentials: true
   }
@@ -28,11 +40,18 @@ io.use(socketAuth);
 io.on('connection', handleConnection(io));
 
 // Start server
-server.listen(PORT, () => {
+server.listen(PORT, async () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📡 Socket.IO server ready`);
   console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
   console.log(`🔗 CORS origin: ${process.env.CORS_ORIGIN || 'http://localhost:3000'}`);
+  
+  // Seed admin users
+  try {
+    await seedUsers();
+  } catch (error) {
+    console.error('❌ Failed to seed users:', error);
+  }
 });
 
 // Graceful shutdown

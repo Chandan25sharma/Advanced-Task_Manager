@@ -1,0 +1,27 @@
+{
+  "name": "task-manager-fullstack",
+  "version": "1.0.0",
+  "description": "Full-stack task management application",
+  "scripts": {
+    "install-all": "cd backend && npm install && cd ../frontend && npm install",
+    "dev": "concurrently \"cd backend && npm run dev\" \"cd frontend && npm run dev\"",
+    "start": "concurrently \"cd backend && npm start\" \"cd frontend && npm run preview\"",
+    "build": "cd frontend && npm run build",
+    "backend": "cd backend && npm run dev",
+    "frontend": "cd frontend && npm run dev"
+  },
+  "keywords": [
+    "task-manager",
+    "react",
+    "nodejs",
+    "socket.io"
+  ],
+  "author": "Task Manager Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.0"
+  },
+  "dependencies": {
+    "dotenv": "^17.2.0"
+  }
+}
