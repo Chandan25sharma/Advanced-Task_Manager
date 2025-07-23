@@ -10,13 +10,13 @@ import LoadingSpinner from '../components/LoadingSpinner';
 const ProjectBoard: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch<AppDispatch>();
-  const { currentProject, isLoading: projectLoading } = useSelector((state: RootState) => state.projects);
-  const { tasks, isLoading: tasksLoading } = useSelector((state: RootState) => state.tasks);
+  const { currentProject, isLoading: projectLoading } = useSelector((state: RootState) => (state.projects as { currentProject: any; isLoading: boolean }));
+  const { tasks, isLoading: tasksLoading } = useSelector((state: RootState) => (state.tasks as { tasks: any[]; isLoading: boolean }));
 
   useEffect(() => {
     if (id) {
       dispatch(fetchProject(id));
-      dispatch(fetchTasks(id));
+      dispatch(fetchTasks({ projectId: id }));
     }
   }, [dispatch, id]);
 

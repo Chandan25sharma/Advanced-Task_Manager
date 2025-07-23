@@ -9,11 +9,10 @@ import { LoginCredentials } from '../api/auth';
 
 const AdminLogin: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { isLoading, error, isAuthenticated, user } = useSelector((state: RootState) => state.auth as {
+  const { isLoading, error, isAuthenticated } = useSelector((state: RootState) => state.auth as {
     isLoading: boolean;
     error: string | null;
     isAuthenticated: boolean;
-    user: any;
   });
   const [showPassword, setShowPassword] = useState(false);
 

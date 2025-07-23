@@ -18,7 +18,7 @@ const initialState: TaskState = {
 // Async thunks
 export const fetchTasks = createAsyncThunk(
   'tasks/fetchTasks',
-  async (projectId?: string, { rejectWithValue }) => {
+  async ({ projectId }: { projectId?: string }, { rejectWithValue }) => {
     try {
       const tasks = await taskApi.getAll(projectId);
       return tasks;

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Plus, Users, Calendar, Clock } from 'lucide-react';
+import { Plus, Users, Calendar} from 'lucide-react';
 import { RootState, AppDispatch } from '../redux/store';
 import { fetchProjects } from '../redux/projectSlice';
 import { logout } from '../redux/authSlice';
@@ -10,8 +10,8 @@ import LoadingSpinner from '../components/LoadingSpinner';
 
 const Dashboard: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
-  const { projects, isLoading } = useSelector((state: RootState) => state.projects);
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { projects, isLoading } = useSelector((state: RootState) => state.projects as { projects: any[]; isLoading: boolean });
+  const { user } = useSelector((state: RootState) => state.auth as { user: { username: string } | null });
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
