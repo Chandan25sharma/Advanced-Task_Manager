@@ -19,7 +19,11 @@ import LoadingSpinner from './components/LoadingSpinner';
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
-  const { isAuthenticated, token, isLoading } = useSelector((state: RootState) => state.auth);
+  const { isAuthenticated, token, isLoading } = useSelector((state: RootState) => state.auth as {
+    isAuthenticated: boolean;
+    token: string | null;
+    isLoading: boolean;
+  });
 
   useEffect(() => {
     // If we have a token, verify it by getting the profile
