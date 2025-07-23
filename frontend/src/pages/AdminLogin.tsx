@@ -45,7 +45,7 @@ const AdminLogin: React.FC = () => {
     const credentials = userType === 'admin' 
       ? { email: 'admin@taskmanager.com', password: 'Admin123!' }
       : { email: 'demo@taskmanager.com', password: 'Demo123!' };
-    
+
     try {
       console.log(`🔐 Demo ${userType} login:`, credentials);
       const result = await dispatch(login(credentials));
@@ -69,7 +69,7 @@ const AdminLogin: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary-500 to-primary-700 py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-800 to-gray-950 py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-md w-full space-y-8">
         <div className="bg-white rounded-lg shadow-xl p-8">
           <div className="text-center">
@@ -82,22 +82,7 @@ const AdminLogin: React.FC = () => {
           </div>
 
           {/* Demo Login Buttons */}
-          <div className="mt-6 space-y-3">
-            <button
-              onClick={() => handleDemoLogin('admin')}
-              disabled={isLoading}
-              className="w-full bg-red-600 hover:bg-red-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50"
-            >
-              🔐 Login as Admin (Demo)
-            </button>
-            <button
-              onClick={() => handleDemoLogin('demo')}
-              disabled={isLoading}
-              className="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50"
-            >
-              👤 Login as Demo User
-            </button>
-          </div>
+          
 
           <div className="relative my-6">
             <div className="absolute inset-0 flex items-center">
@@ -193,11 +178,6 @@ const AdminLogin: React.FC = () => {
           </form>
 
           <div className="mt-6 text-center">
-            <div className="text-sm text-gray-600 space-y-2">
-              <p><strong>Demo Credentials:</strong></p>
-              <p>Admin: admin@taskmanager.com / Admin123!</p>
-              <p>User: demo@taskmanager.com / Demo123!</p>
-            </div>
             <div className="mt-4">
               <Link
                 to="/login"
